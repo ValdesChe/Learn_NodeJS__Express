@@ -11,26 +11,27 @@ router.get('/', function (req, res) {
     res.render('rooms/index',  { title : 'Rooms management', rooms: rooms});
 });
 
-/*
-    Request add new chat room form
- */
-router.get('/add', function (req, res, next) {
-    res.render('rooms/add', { title : 'Add  a room' });
-});
+router.route('/add')
+    /*
+        Request add new chat room form
+     */
+    .get( function (req, res) {
+        res.render('rooms/add', { title : 'Add  a room' });
+    })
 
-/*
-    Submit create new chat room form
- */
-router.post('/add', function (req, res, next) {
-    const room = {
-        name: req.body.name,
-        id: node_uuid.v4()
-    };
-    rooms.push(room);
-    // Respond with JSON
-    // res.json(room);
-    res.redirect(req.baseUrl);
-});
+    /*
+        Submit create new chat room form
+     */
+    .post(function (req, res) {
+        const room = {
+            name: req.body.name,
+            id: node_uuid.v4()
+        };
+        rooms.push(room);
+        // Respond with JSON
+        // res.json(room);
+        res.redirect(req.baseUrl);
+    });
 
 /*
     Deleting a chat room
@@ -44,39 +45,33 @@ router.get('/delete/:id', function (req, res, next) {
     res.redirect(req.baseUrl);
 });
 
-/*
-    Edit chat room form
- */
-router.get('/edit/:id', function (req, res) {
-    const room_id = req.params.id;
-    const roomIndex = _.findIndex(rooms, (room) => {
-        return room.id === room_id;
+router.route('/edit/:id')
+    .all(function (req, res, next) {
+        const room_id = req.params.id;
+        const room = _.find(rooms, (room) => {
+            return room.id === room_id;
+        });
+        if(!room){
+            res.status(404);
+            res.render('utils/404', {title: '404 Error', error_title: 'Error occurred while editing', error_code: 'OVA15-UR', error_reason: 'Chat room with ID = ' + room_id + ' not found !'})
+            // next("Something wrong happen");
+            return;
+        }
+        res.locals.room = room;
+        next();
+    })
+    /*
+        Edit chat room form
+     */
+    .get( function (req, res) {
+        res.render('rooms/edit');
+    })
+    /*
+        Submit Edit chat room
+     */
+    .post(function (req, res) {
+        res.locals.room.name = req.body.name;
+        res.redirect('./..');
     });
-    if(roomIndex > -1){
-       const room = rooms[roomIndex];
-        res.render('rooms/edit', {room});
-    }
-    else{
-        res.render('utils/404', {title: '404 Error', error_title: 'Error occurred while editing', error_code: 'OVA15-UR', error_reason: 'Chat room with ID = ' + room_id + ' not found !'})
-    }
-});
-
-/*
-    Submit Edit chat room
- */
-router.post('/edit/:id', function (req, res) {
-    const roomId = req.params.id;
-    const roomName = req.body.name;
-    const roomIndex = _.findIndex(rooms, (room) => {
-        return room.id === roomId;
-    });
-    if(roomIndex > -1){
-        rooms[roomIndex].name = roomName;
-        res.redirect(req.baseUrl);
-    }
-    else{
-        res.render('utils/404', {title: '404 Error', error_title: 'Error occurred while editing !', error_code: 'OVA15-UR', error_reason: 'Chat room with ID = ' + roomId + ' not found !'})
-    }
-});
 
 module.exports = router;
