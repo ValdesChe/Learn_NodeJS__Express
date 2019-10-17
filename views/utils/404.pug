@@ -1,0 +1,6 @@
+extends ../layout
+block content
+    h4= error_code
+    h1= error_title
+    p.text-danger= error_reason
+    a.btn.btn-primary(href="/rooms") Back to rooms

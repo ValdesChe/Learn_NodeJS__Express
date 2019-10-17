@@ -1,0 +1,24 @@
+extends ../layout
+block content
+    div.table-wrapper
+        div.table-title
+            div.row
+                div.col-sm-8
+                    h1 List of chat rooms
+                div.col-sm-4
+                    a.btn.btn-primary(href="/rooms/add") Create a new chat room
+        table.table.table-striped.table-hover
+            thead
+                tr
+                    th Name
+                    th Id
+                    th Actions
+            tbody
+                each room in rooms
+                    tr
+                        td= room.name
+                        td= room.id
+                        td
+                            div.btn-group
+                                a.btn.edit(href="/rooms/edit/" + room.id) Edit
+                                a.btn.delete(href="/rooms/delete/" + room.id) Delete
