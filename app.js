@@ -8,6 +8,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var roomsRouter = require('./routes/rooms');
 var usersRouter = require('./routes/users');
+var apiRouter = require('./routes/api');
 
 var app = express();
 
@@ -21,11 +22,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
+app.use(express.static(path.join(__dirname, 'node_modules/jquery/dist')));
 // app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/', indexRouter);
 app.use('/rooms', roomsRouter);
-app.use('/users', usersRouter);
+// app.use('/users', usersRouter);
+// Api routes
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
