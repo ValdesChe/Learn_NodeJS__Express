@@ -5,7 +5,7 @@ $(function () {
     $.ajax({
         type: "GET",
         url: "/api/rooms"
-    }).success(function (rooms) {
+    }).done(function (rooms) {
         roomId = rooms[0].id;
         getMessages();
         $.each(rooms, function (key, room) {
@@ -23,7 +23,7 @@ $(function () {
             url: "/api/rooms/" + roomId + "/messages",
             data: JSON.stringify(message),
             contentType : "application/json"
-        }).success(function () {
+        }).done(function () {
             $("#message").val("");
             getMessages();
         });
@@ -38,7 +38,7 @@ $(function () {
         $.ajax({
             type: "GET",
             url: "/api/rooms/" + roomId + "/messages",
-        }).success(function (data) {
+        }).done(function (data) {
             $("#roomName").text("Messages for " + data.room.name);
             var messages = "";
             $.each(data.messages, function (key, message) {
@@ -52,7 +52,7 @@ $(function () {
         $.ajax({
             type: "DELETE",
             url: "/api/rooms/" + roomId + "/messages",
-        }).success(function () {
+        }).done(function () {
             $("#messages").val("");
         });
     });
