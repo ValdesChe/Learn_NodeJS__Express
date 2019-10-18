@@ -2,10 +2,7 @@ var express = require('express');
 var router = express.Router();
 var node_uuid = require('node-uuid');
 var _ = require('lodash');
-let rooms = [
-            // {name: 'C# development', id: 'as55-26-sa5-a455'},
-            // {name: 'Web development with Bootstrap 3', id: 'd45a46-as5a-s5-7raae'}
-        ];
+let rooms = require('../data/rooms');
 
 router.get('/', function (req, res) {
     res.render('rooms/index',  { title : 'Rooms management', rooms: rooms});
