@@ -12,6 +12,7 @@ router.get('/rooms', function (req, res, next) {
     res.json(rooms);
 });
 router.route("/rooms/:roomId/messages")
+    // Getting a chat room's messages
     .get(function (req, res) {
         let roomId = req.params.roomId;
         let roomMessages = messages
@@ -29,6 +30,7 @@ router.route("/rooms/:roomId/messages")
         })
 
     })
+    // Adding a message to a room
     .post(function (req, res) {
         const roomId = req.params.roomId;
 
@@ -43,6 +45,7 @@ router.route("/rooms/:roomId/messages")
 
         res.sendStatus(200);
     })
+    // Deleting room's messages
     .delete(function (req, res) {
         const roomId = req.params.roomId;
 
